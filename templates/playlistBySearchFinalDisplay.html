@@ -1,0 +1,15 @@
+<head>
+    <title>Music Mate</title>
+</head>
+<body>
+    <a href="/playlistBySearch/"><button>Back</button></a>
+    <h1>Groovy, here's information about <a href="{{trackURL}}">{{trackName}}</a>!</h1>
+    <p>{{trackDBSearch}}</p>
+    <p>{{trackArtist}}</p>
+    <p>{{trackAlbum}}</p>
+    <img src="{{trackImage}}">
+    {% for item in playlistList %}
+        <a href="{{item['url']}}"><img src="{{item['image']}}"><p>{{item['playlistName']}}</p></a>
+    {% endfor %}
+    
+</body>

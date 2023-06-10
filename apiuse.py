@@ -11,88 +11,79 @@ from urllib.error import HTTPError
 def getRecents(checklimit=10):
     results = sp.current_user_recently_played(limit=checklimit)
     recentTracks = []
-    c = 1
     for item in results['items']:
+        currentTrack = {}
         track = item['track']
         trackID = track['id']
-        recentTracks.append(trackID)
-        try:
-            print(str(c)+". "+track["name"], "by", track["artists"]["name"])
-        except TypeError:
-            artistList = []
-            for artists in track["artists"]:
-                artistList.append(artists["name"])
-            print(str(c)+". "+track["name"], "by", ', '.join(artistList))
+        currentTrack['name'] = track['name']
+        currentTrack['artist'] = track['artists'][0]['name']
+        currentTrack['id'] = trackID
+        trackDetails = sp.track(trackID)
+        currentTrack["image"] = trackDetails['album']['images'][0]['url']
+        recentTracks.append(currentTrack)
         databasing.saveTracktoDB(trackID)
-        c += 1
     return recentTracks
 
 def getTop(checklimit=10, timeframe="medium_term"):
     results = sp.current_user_top_tracks(limit=checklimit, time_range=timeframe)
     topTracks = []
-    c = 1
-    for item in results['items']:
-        try:
-            print(str(c)+". "+item["name"], "by", item["artists"]["name"])
-        except TypeError:
-            artistList = []
-            for artists in item["artists"]:
-                artistList.append(artists["name"])
-            print(str(c)+". "+item["name"], "by", ', '.join(artistList))
-        trackID = item['id']
-        topTracks.append(trackID)
-        print(trackID)
+    for track in results['items']:
+        currentTrack = {}
+        trackID = track['id']
+        currentTrack['name'] = track['name']
+        currentTrack['artist'] = track['artists'][0]['name']
+        currentTrack['id'] = trackID
+        trackDetails = sp.track(trackID)
+        currentTrack["image"] = trackDetails['album']['images'][0]['url']
+        topTracks.append(currentTrack)
         databasing.saveTracktoDB(trackID)
-        c += 1
     return topTracks
+
 
 def getLibrary(limit = 10):
     results = sp.current_user_saved_tracks(limit)
     libraryTracks = []
-    c = 1
     for item in results['items']:
-        try:
-            print(str(c)+". "+item["track"]["name"], "by", item["track"]["artists"]["name"])
-        except TypeError:
-            artistList = []
-            for artists in item["track"]["artists"]:
-                artistList.append(artists["name"])
-            print(str(c)+". "+item["track"]["name"], "by", ', '.join(artistList))
-        trackID = item["track"]['id']
-        libraryTracks.append(trackID)
+        currentTrack = {}
+        track = item['track']
+        trackID = track['id']
+        currentTrack['name'] = track['name']
+        currentTrack['artist'] = track['artists'][0]['name']
+        currentTrack['id'] = trackID
+        trackDetails = sp.track(trackID)
+        currentTrack["image"] = trackDetails['album']['images'][0]['url']
+        libraryTracks.append(currentTrack)
         databasing.saveTracktoDB(trackID)
-        c += 1
     return libraryTracks
+
 
 def getRecommendations(baseTrack, recommnendNum):
     recommendedTracks = sp.recommendations(seed_tracks=baseTrack, limit=recommnendNum)
-    recommendID = []
-    print("Recommending...")
-    c = 0
-    for i in recommendedTracks['tracks']:
-        recommendID.append(recommendedTracks['tracks'][c]['id'])
-        try:
-            print(str(c+1)+". "+recommendedTracks['tracks'][c]["name"], "by", recommendedTracks["tracks"][c]["artists"]["name"])
-        except TypeError:
-            artistList = []
-            for artists in recommendedTracks["tracks"][c]["artists"]:
-                artistList.append(artists["name"])
-            print(str(c+1)+". "+recommendedTracks['tracks'][c]["name"], "by", ', '.join(artistList))
-        c += 1
-    return recommendID
+    recommendations = []
+    for track in recommendedTracks['tracks']:
+        currentTrack = {}
+        trackID = track['id']
+        currentTrack['name'] = track["name"]
+        currentTrack['artist'] = track["artists"][0]["name"]
+        currentTrack['id'] = trackID
+        currentTrack['url'] = track['external_urls']['spotify']
+        trackDetails = sp.track(trackID)
+        currentTrack["image"] = trackDetails['album']['images'][0]['url']
+        recommendations.append(currentTrack)
+    return recommendations
 
 def getPlaylists(getLimit=10):
     userPlaylists = sp.user_playlists(user=userID, limit=getLimit)
-    playlistIDs = []
-    print(userPlaylists['total'])
-    c = 0
-    for i in userPlaylists['items']:
-        printedC = c + 1
-        print(str(printedC)+". "+userPlaylists['items'][c]['name'])
-        playlistIDs.append(userPlaylists["items"][c]["id"])        
-        getPlaylistItems(userPlaylists["items"][c]["id"])
-        c += 1
-    return playlistIDs
+    playlists= []
+    for playlist in userPlaylists['items']:
+        currentPlaylist = {}
+        currentPlaylist['name'] = playlist['name']
+        currentPlaylist['id'] = playlist['id']
+        currentPlaylist['image'] = playlist['images'][0]['url']
+        playlists.append(currentPlaylist)
+        getPlaylistItems(playlist['id'])
+    return playlists
+
 
 def getPlaylistItems(playlistID):
     trackIDs = []
@@ -107,8 +98,10 @@ def getPlaylistItems(playlistID):
 
 def createPlaylist(name, description="", publicStatus=False):
     response = sp.user_playlist_create(userID, name, publicStatus, description=description)
-    print(f"Created playlist called {name}")
-    return response['id']
+    if response['id']:
+        return response['id']
+    else:
+        return False
 
 def addTrack(playlistID, trackIDs):
     trackURI = []
@@ -126,21 +119,28 @@ def addTrack(playlistID, trackIDs):
 
 def generalSearch(query, limit=5):
     results = sp.search(query,limit, type='track')
-    searchIDs = []
-    searchName = []
-    c = 1
+    allResults = []
     for typeResult in results:
         resultType = results[typeResult]
         for itemResult in resultType["items"]:
-           print(str(c)+".", itemResult["name"], "by", itemResult["artists"][0]["name"], "in", itemResult["album"]["name"], ":", itemResult["external_urls"]["spotify"])
-           searchIDs.append(itemResult['id'])
-           searchName.append(itemResult["name"])
-           c +=1
-    return searchIDs
+           searchResult = {}
+           trackID = itemResult['id']
+           searchResult['id'] = trackID
+           searchResult['name'] = itemResult['name']
+           searchResult['artist'] = itemResult['artists'][0]['name']
+           searchResult['album'] = itemResult['album']['name']
+           trackDetails = sp.track(trackID)
+           searchResult["image"] = trackDetails['album']['images'][0]['url']
+           allResults.append(searchResult)
+    return allResults
 
 def getPlaylistName(playlistID):
     try:
         results = sp.playlist(playlistID)
-        return results['name'] + " : " + results["external_urls"]["spotify"]
+        return {
+                "playlistName":results['name'], 
+                "url":results["external_urls"]["spotify"],
+                "image":results["images"][0]["url"]
+                }
     except HTTPError as err:
-        print(err)
+        return {"error":err}

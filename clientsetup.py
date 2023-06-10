@@ -15,5 +15,4 @@ def initalise():
 
 sp = initalise()
 userInfo = sp.me()
-userName = userInfo['display_name']
 userID = userInfo['id']

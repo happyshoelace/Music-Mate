@@ -1,0 +1,11 @@
+<head>
+    <title>Music Mate</title>
+</head>
+<body>
+    <a href="/home/"><button>Back</button></a>
+    <h1>Let's find a song!</h1>
+    <form action="/searchTracks/" method="POST">
+        <input name="searchQuery" type="text" placeholder="Search for a song!">
+        <button type="submit" value="submit">Search</button>
+    </form> 
+</body>

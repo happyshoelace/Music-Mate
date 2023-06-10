@@ -1,0 +1,20 @@
+<head>
+    <title>Music Mate</title>
+</head>
+<body>
+    <a href="/home/"><button>Back</button></a>
+    <form class="trackResult" action="/generateRecommendations/" method="POST">
+    <h3>Top Tracks</h3>
+    {% for item in topTracks %}
+        <button type="submit" name="trackValue" value="{{item['id']}}"><img src="{{item['image']}}"><p>{{item['name']}} by {{item['artist']}}</p></button>
+    {% endfor %}
+    <h3>Recent Tracks</h3>
+    {% for item in recentTracks %}
+        <button type="submit" name="trackValue" value="{{item['id']}}"><img src="{{item['image']}}"><p>{{item['name']}} by {{item['artist']}}</p></button>
+    {% endfor %}
+    <h3>In Your Library</h3>
+    {% for item in library %}
+        <button type="submit" name="trackValue" value="{{item['id']}}"><img src="{{item['image']}}"><p>{{item['name']}} by {{item['artist']}}</p></button>
+    {% endfor %}
+    </form>
+</body>

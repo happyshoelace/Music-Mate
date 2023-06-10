@@ -1,0 +1,12 @@
+<head>
+    <title>Music Mate</title>
+</head>
+<body>
+    <a href="/playlistBySearch/"><button>Back</button></a>
+    <h1>Here's what we got!</h1>
+    {% for item in searchResults %}
+        <form class="trackResult" action="/findPlaylists/" method="POST">
+        <button type="submit" name="trackValue" value="{{item['id']}}"><img src="{{item['image']}}"><p>{{item['name']}} by {{item['artist']}} in {{item['album']}}</p></button>
+        </form>
+    {% endfor %}
+</body>

@@ -1,16 +1,15 @@
 import pprint
 from psycopg2 import *
 import psycopg2
-from clientsetup import userID
 from client import *
+from clientsetup import userID
+
 
 def saveTracktoDB(trackID):
     try:
         # Connect to an existing database
-        connection = psycopg2.connect(user=dbuser,
+        connection = psycopg2.connect(user="postgres",
                                     password=dbpass,
-                                    host=dbHost,
-                                    port=dbPort,
                                     dbname = dbName)
 
         # Create a cursor to perform database operations
@@ -33,6 +32,7 @@ def saveTracktoDB(trackID):
 
     except (Exception, Error) as error:
         print("Error while connecting to PostgreSQL", error)
+        return "Error", error
     finally:
         if (connection):
             cursor.close()
@@ -42,10 +42,8 @@ def saveTracktoDB(trackID):
 def savePlaylistItemsToDB(playlistID, trackIDs):
     try:
         # Connect to an existing database
-        connection = psycopg2.connect(user=dbuser,
+        connection = psycopg2.connect(user="postgres",
                                     password=dbpass,
-                                    host=dbHost,
-                                    port=dbPort,
                                     dbname = dbName)
 
         # Create a cursor to perform database operations
@@ -77,12 +75,11 @@ def savePlaylistItemsToDB(playlistID, trackIDs):
                 connection.commit()
                 cursor.execute(f"INSERT INTO public.user_tracks (track_id, user_id) VALUES ('{trackID}' , '{userID}')")
                 connection.commit()
-        else:
-            print("Already in DB")
 
 
     except (Exception, Error) as error:
         print("Error while connecting to PostgreSQL", error)
+        return "Error", error
     finally:
         if (connection):
             cursor.close()
@@ -91,10 +88,8 @@ def savePlaylistItemsToDB(playlistID, trackIDs):
 def readTracksFromDB(trackID):
     try:
         # Connect to an existing database
-        connection = psycopg2.connect(user=dbuser,
+        connection = psycopg2.connect(user="postgres",
                                     password=dbpass,
-                                    host=dbHost,
-                                    port=dbPort,
                                     dbname = dbName)
 
         # Create a cursor to perform database operations
@@ -128,10 +123,11 @@ def readTracksFromDB(trackID):
 
             return response   
         except TypeError:
-            return "Hmmm, looks like we don't have this recorded in our database! (Hint: Choose option 3 on the main screen to do a track/playlist update)"
+            return "Error", "Hmmm, looks like we don't have this recorded in our database!"
 
     except (Exception, Error) as error:
         print("Error while connecting to PostgreSQL", error)
+        return "Error", error
     finally:
         if (connection):
             cursor.close()
@@ -140,10 +136,8 @@ def readTracksFromDB(trackID):
 def readPlaylistsFromDB(trackID):
     try:
         # Connect to an existing database
-        connection = psycopg2.connect(user=dbuser,
+        connection = psycopg2.connect(user="postgres",
                                     password=dbpass,
-                                    host=dbHost,
-                                    port=dbPort,
                                     dbname = dbName)
 
         # Create a cursor to perform database operations
@@ -161,6 +155,7 @@ def readPlaylistsFromDB(trackID):
 
     except (Exception, Error) as error:
         print("Error while connecting to PostgreSQL", error)
+        return "Error", error
     finally:
         if (connection):
             cursor.close()
