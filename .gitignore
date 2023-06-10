@@ -1,0 +1,4 @@
+music-mate/
+client.py
+.cache
+__pycache__/
