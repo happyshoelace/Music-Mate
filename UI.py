@@ -21,13 +21,14 @@ def home():
     try:
         userInfo = sp.me()
         userName = userInfo['display_name']
-        return render_template('home.html',userName=userName)
+        userImage = userInfo['images'][0]['url']
+        return render_template('home.html',userName=userName, userImage=userImage)
     except NameError:
         return redirect('/authenticateUser/')
 
 @app.route('/playlistBySearch/')
 def playlistBySearch():
-    return render_template('playlistBySearchIndex')
+    return render_template('playlistBySearchIndex.html')
     
 @app.route('/searchTracks/', methods=["GET","POST"])
 def searchTracks():
@@ -57,26 +58,41 @@ def findPlaylists():
         trackDBSearch = databasing.readTracksFromDB(trackID)
         playlistID = databasing.readPlaylistsFromDB(trackID)
         playlistList = []
+        registeredListeners = 0
+        userPlays = 0
+        userInfo = sp.me()
+        userName = userInfo['id']
+        recordedTrack = False
+        timeResponse = ""
+        for user in trackDBSearch['registered listeners']:
+            registeredListeners += 1
+            if user == userName:
+                userPlays = trackDBSearch['registered listeners'][user]
+                recordedTrack = True
+        if recordedTrack:
+            firstRecord = trackDBSearch['first recorded']
+            lastRecord = trackDBSearch['most recent record']
+            timeResponse = f"The first time you logged it was on {firstRecord}, and the most recent time was {lastRecord}!"
         for playlist in playlistID:
             try:
                 playlistInfo = apiuse.getPlaylistName(playlist[0])
                 playlistList.append(playlistInfo)
             except (spotipy.SpotifyException, HTTPError) as err:
                 print(err)
-        return render_template('playlistBySearchFinalDisplay.html', trackID=trackID, trackName=trackName, trackAlbum=trackAlbum, trackArtist=trackArtist,trackImage=trackImage, trackURL= trackURL, trackDBSearch=trackDBSearch, playlistList=playlistList)
+        return render_template('playlistBySearchFinalDisplay.html', userPlays=userPlays, timeResponse=timeResponse, trackID=trackID, trackName=trackName, trackAlbum=trackAlbum, trackArtist=trackArtist,trackImage=trackImage, trackURL= trackURL, trackDBSearch=trackDBSearch, playlistList=playlistList)
 
 @app.route('/playlistByRecommendation/')
 def playlistByRecommendation():
-    topTracks = apiuse.getTop(2, "short_term")
-    recentTracks = apiuse.getRecents(2)
-    library = apiuse.getLibrary(2)
+    topTracks = apiuse.getTop(25, "short_term")
+    recentTracks = apiuse.getRecents(25)
+    library = apiuse.getLibrary(25)
     return render_template('playlistByRecommendationIndex.html', topTracks=topTracks, recentTracks=recentTracks, library=library)
 
 @app.route('/generateRecommendations/', methods=['GET', 'POST'])
 def generateRecommendations():
     if request.method == 'POST':
         global trackID; trackID = [request.form.get('trackValue')]
-        recommendations = apiuse.getRecommendations(trackID,5)
+        recommendations = apiuse.getRecommendations(trackID,25)
         return render_template('generateRecommendations.html', recommendations=recommendations)
     else:
         try:
@@ -91,7 +107,7 @@ def getPlaylists():
     if request.method == 'POST':
         global recommendationIDs; recommendationIDs = request.form.getlist('recommendedTrack')
         playlists = apiuse.getPlaylists(25)
-        return render_template('recommendationsGetPlaylist', playlists=playlists)
+        return render_template('recommendationsGetPlaylist.html', playlists=playlists)
     else:
         return render_template('err.html')
     
@@ -127,7 +143,7 @@ def addToPlaylists():
         recommendationIDs.append(trackID[0])
         response = apiuse.addTrack(playlistID,recommendationIDs)
         if response:
-            return render_template('playlistAddSuccess')
+            return render_template('playlistAddSuccess.html')
         else:
             flash("Hmm, something went wrong.")
             return redirect('/home/')
@@ -146,7 +162,9 @@ def addToPlaylists():
         except NameError:
             return render_template('err.html')
             
-
+@app.errorhandler(404)
+def error404(e):
+    return render_template('err.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

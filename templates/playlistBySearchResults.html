@@ -1,12 +1,15 @@
 <head>
     <title>Music Mate</title>
+    <link rel="stylesheet" href="../static/css/main.css">
 </head>
 <body>
-    <a href="/playlistBySearch/"><button>Back</button></a>
-    <h1>Here's what we got!</h1>
+    <a href="/playlistBySearch/"><button class="back">Back</button></a>
+    <form class="trackResult" action="/findPlaylists/" method="POST">
+    <h2>Here's what we got! Click on a song for more information!</h2>
+    <div class="top" style="padding-top:200px;padding-bottom:250px;">
     {% for item in searchResults %}
-        <form class="trackResult" action="/findPlaylists/" method="POST">
         <button type="submit" name="trackValue" value="{{item['id']}}"><img src="{{item['image']}}"><p>{{item['name']}} by {{item['artist']}} in {{item['album']}}</p></button>
-        </form>
     {% endfor %}
+    </div>
+    </form>
 </body>

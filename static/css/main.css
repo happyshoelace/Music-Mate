@@ -1,0 +1,442 @@
+@import url('https://fonts.googleapis.com/css2?family=Barrio&family=Carter+One&display=swap');
+
+:root {
+    --backgroundGreen: #aebf97;
+    --standoutText: #b2668c;
+    --buttonBlue: #a6bacd;
+    --buttonPurple: #a58bbd;
+    --buttonPink: #b2849b;
+    --mainSection: #f6f6f6;
+    --highlightSection: #dfdede;
+    --mainText: #473e44;
+}
+
+ * {
+    scrollbar-width: thin;
+    scrollbar-color: #aebf97 #f6f6f6;
+  }
+
+body {
+    background-color: var(--backgroundGreen);
+}
+
+input {
+    font-size: 20px;
+    font-family: 'Carter One', cursive;
+    color: var(--mainText);
+    padding:15px;
+}
+
+p {
+    font-family: 'Carter One', cursive;
+    color: var(--mainText);   
+}
+
+.back {
+    background-color: #8f7065;
+    border:none;
+    border-radius: 25px;
+    height:50px;
+    width: 150px;
+    color: var(--mainSection)
+}
+
+.back:hover{
+    background-color: #63504a;
+}
+
+
+.home{
+    background-color: #849bbc;
+    border:none;
+    border-radius: 25px;
+    height:50px;
+    width: 150px;
+    color: var(--mainSection)
+}
+
+.home:hover{
+    background-color: #69809f;
+}
+
+
+.recommendations {
+    padding: 15px;
+}
+
+
+h2 {
+    font-family: 'Carter One', cursive;
+    color:var(--standoutText);
+    text-align:center;
+}
+
+.index {
+    text-align: center;
+}
+
+.APIButton >img {
+    width: 100px;
+    
+}
+
+.APIButton {
+    padding: 10px;
+    font-size: 15px;
+    width:300px;
+}
+
+
+.top,.recent,.library,.recommendations{
+    display: flex;
+    overflow-x:scroll;
+    overflow-y:clip;
+    padding-bottom:150px;
+}
+
+.top>button>img{
+  width: 100px;
+  height: 100px;
+    
+}
+
+.top >button{
+    background-color: var(--buttonPink);
+    border: none;
+    border-radius: 25px;
+    
+}
+
+
+.top>button:hover{
+    background-color: #9e6c85;
+}
+
+.recent>button {
+    background-color: var(--buttonPurple);
+    border: none;
+     border-radius: 25px;
+}
+
+.recent>button:hover{
+     background-color: rgb(146, 120, 169);
+}
+
+.library>button {
+    background-color: var(--buttonBlue);
+    border: none;
+     border-radius: 25px;
+}
+
+.library>button:hover{
+    background-color: #6b7f92;
+}
+
+form {
+    background-color: var(--mainSection);
+    padding: 25px;
+    border-radius: 25px;
+}
+
+.homeScreenDecisions {
+    background-color: var(--mainSection);
+    text-align: center;
+    padding: 50px;
+    margin: auto;
+    font-size: 25px;
+    border-radius: 25%;
+}
+
+.selection>a>button{
+    font-size: 25px;
+}
+
+.homeScreenDecisions>a>button{
+    font-size: 25px;
+}
+
+.userInfo {
+    display: flex;
+    flex-flow:row;
+    font-size: 15px;
+}
+
+.userInfo >img {
+    border-radius: 50%;
+    width:20%;
+    height: 20%;
+}
+
+.homeScreen {
+    display: flex;
+    flex-flow: row;
+}
+
+.pink{
+    background-color: var(--buttonPink);
+    border-radius: 64% 36% 70% 30% / 44% 57% 43% 56%;
+    border: none;
+}
+
+.pink:hover{
+    background-color: #9e6c85;
+}
+
+.blue {
+    background-color: var(--buttonBlue);
+    border-radius:58% 42% 71% 29% / 60% 70% 30% 40% ;
+    border:none;
+}
+
+.blue:hover {
+    background-color: #6b7f92;
+}
+
+.purple {
+    background-color: var(--buttonPurple);
+    border-radius:83% 17% 49% 51% / 24% 93% 7% 76%;
+    border:none;
+}
+
+.purple:hover{
+    background-color:rgb(146, 120, 169);
+}
+
+h1 {
+    font-family: 'Barrio', cursive;
+    color: var(--standoutText);
+    font-size: 150px;
+    text-align: center;
+}
+
+.homescreenLogos {
+    text-align: left;
+    margin: auto;
+}
+
+.selection {
+    padding:10px;
+}
+
+h3{
+    font-family: 'Carter One', cursive;
+    color:var(--mainText);
+}
+
+button {
+    padding: 10px;
+    margin: 15px;
+    color: var(--mainText);
+    font-family: 'Carter One', cursive;
+    width: 300px;
+    height:125px;
+}
+
+footer > img{
+    width: 200px;
+}
+
+footer{
+    font-size:25px;
+    display: inline;
+    margin:0px;
+    font-family: 'Carter One', cursive;
+    color: var(--mainSection)
+}
+
+footer>p{
+    color:var(--mainSection);
+}
+
+.recommendations{
+    display: flex;
+    overflow-x:scroll;
+    overflow-y:clip;
+    padding-bottom:150px;
+}
+
+.recommendations>*{
+    display: flex;
+    flex:column;
+}
+
+img{
+    width: 100px;
+    max-height: 100px;
+    padding:5px;
+}
+
+.item{
+    font-family: 'Carter One', cursive;
+    max-width: 250px;   
+    padding: 10px;
+}
+
+.backgrounded{
+    background-color: var(--buttonBlue);
+    display: flex;
+    padding: 15px;
+    border-radius: 25px;
+    text-align: center;
+}
+
+.item>div>label>img{
+    margin-left: 25px;
+    
+}
+
+.item>label>a{
+    padding: 15px;
+    border-radius: 25px;
+}
+
+.item{
+    display: inline flow-root;
+    text-align: center;
+}
+
+.item>a{
+    color: var(--mainText);
+}
+
+.item>a:hover{
+    color:#80787d;
+}
+
+.next {
+    font-size: 25px;
+    width: 100px;
+    height:75px;
+}
+
+.right-button {
+    text-align: right;
+}
+
+input[type=checkbox]{
+    transform: scale(150%);
+    margin-right:10px;
+}
+
+.playlists{
+    display: flex;
+    overflow-x:scroll;
+    overflow-y:clip;
+    padding-bottom:150px;
+}
+
+.playlists>button{
+    background-color: var(--buttonPurple);
+    border:none;
+    border-radius: 25px;
+}
+
+.playlists>button:hover{
+    background-color:rgb(146, 120, 169);
+}
+
+.playlists>button>img{
+    width: 100px;
+    max-height: 100px;
+    padding:5px;
+}
+
+.newPlaylist {
+    padding:5px;
+    margin:5px;
+    text-align: center;
+}
+
+input[type="text"]{
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.radioText{
+    font-family: 'Carter One', cursive;
+    color: var(--mainText);
+    margin: 10px;
+}
+
+.searchSection{
+    background-color: var(--mainSection);
+    text-align: left;
+    padding: 50px;
+    margin: auto;
+    font-size: 25px;
+    border-radius: 25%;
+    display: block;
+}
+
+.trackContainer>a>button{
+    background-color: var(--buttonPurple);
+    border: none;
+    border-radius: 25px;
+    display: flex;
+    font-size: 15px;
+    width: 100%;
+}
+
+.trackContainer>a>button:hover{
+    background-color: rgb(146, 120, 169);
+}
+
+.trackContainer>a{
+    text-decoration: none;
+}
+
+.trackContainer>a>button>p{
+    font-size: 25px;
+}
+
+.playlistResult{
+    background-color: var(--highlightSection);
+    padding: 20px;
+    border-radius: 25px;
+    height:350px;
+    width:400px;
+    overflow-y:scroll;
+}
+
+.playlistResult>a>.playlist{
+    display: flex;
+    text-align: right;
+    padding:5px;
+    width:250px;
+}
+
+.searchResult{
+    display: flex;
+    padding:50px;
+}
+
+.trackInfo{
+    padding: 15px;
+    margin-right: 150px;
+}
+
+.searchResult>.trackInfo{
+    font-size:25px;
+}
+
+.playlist{
+    background-color: var(--buttonPink);
+    border: none;
+    border-radius: 25px;
+    display: flex;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.playlist:hover{
+    background-color: #9e6c85;
+}
+
+.playlist>p{
+    text-align: center;
+}
+
+a{
+    text-decoration: none;
+}

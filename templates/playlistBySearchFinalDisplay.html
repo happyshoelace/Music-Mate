@@ -1,15 +1,29 @@
 <head>
     <title>Music Mate</title>
+    <link rel="stylesheet" href="../static/css/main.css">
 </head>
 <body>
-    <a href="/playlistBySearch/"><button>Back</button></a>
-    <h1>Groovy, here's information about <a href="{{trackURL}}">{{trackName}}</a>!</h1>
-    <p>{{trackDBSearch}}</p>
-    <p>{{trackArtist}}</p>
-    <p>{{trackAlbum}}</p>
-    <img src="{{trackImage}}">
-    {% for item in playlistList %}
-        <a href="{{item['url']}}"><img src="{{item['image']}}"><p>{{item['playlistName']}}</p></a>
-    {% endfor %}
-    
+    <a href="/playlistBySearch/"><button class="back">Back</button></a>
+    <a href="/home/"><button class="home">Home</button></a>
+    <div class="searchSection">
+    <h2>Groovy, here's information about that track!</h2>
+    <div class="searchResult">
+        <div class="trackInfo">
+            <div class="trackContainer">
+                <a href="{{trackURL}}">
+                <button>
+                    <img src="{{trackImage}}">
+                    <p>{{trackName}} by {{trackArtist}} in {{trackAlbum}}</p>
+                </button>
+                </a>
+            </div>
+        <p>You've listened to {{trackName}} {{userPlays}} time/s. <br> {{timeResponse}}</p>
+        </div>
+        <div class="playlistResult">
+        {% for item in playlistList %}
+            <a href="{{item['url']}}"><button class="playlist"><img src="{{item['image']}}"><p>{{item['playlistName']}}</p></button></a>
+        {% endfor %}
+        </div>
+    </div>
+    </div>
 </body>

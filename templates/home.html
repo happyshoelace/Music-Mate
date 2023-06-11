@@ -1,9 +1,27 @@
 <head>
     <title>Music Mate</title>
+    <link rel="stylesheet" href="../static/css/main.css">
 </head>
-<body>
-    <h3>Logged in as {{userName}}</h3>
-    <h1>Music Mate</h1>
-    <a href="/playlistByRecommendation/"><button>playlist by recommendation</button></a>
-    <a href="/playlistBySearch/"><button>playlist by search</button></a>
+<body >
+<div class="homeScreen">
+    <div class=homeScreenLogos>
+        <h1>Music Mate</h1>
+    </div>
+    <div class="homeScreenDecisions">
+        <div class="userInfo">
+            <img src="{{userImage}}">
+            <h3>Logged in as {{userName}}</h3>
+        </div>
+        <div class="selection">
+            <h3>What do you want to do?</h3>
+            <a href="/playlistByRecommendation/"><button class="pink">playlist by recommendation</button></a>
+            <br>
+            <a href="/playlistBySearch/"><button class="blue">playlist by search</button></a>
+        </div>
+    </div>
+</div>
 </body>
+<footer>
+        <p>Powered by</p>
+        <img src="../static/images/Spotify_Logo_RGB_White.png">
+    </footer>

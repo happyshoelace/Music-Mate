@@ -1,9 +1,0 @@
-<head>
-    <title>Music Mate</title>
-</head>
-<body>
-    <h1>Awesome! Tracks added to playlist!</h1>
-    <h2>What do you want to do now?</h2>
-    <a href="/home/"><button>Home</button></a>
-    <a href="/playlistByRecommendation/"><button>Get New Recommendations</button></a>
-</body>

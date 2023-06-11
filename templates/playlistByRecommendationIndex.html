@@ -1,20 +1,28 @@
 <head>
     <title>Music Mate</title>
+    <link rel="stylesheet" href="../static/css/main.css">
 </head>
 <body>
-    <a href="/home/"><button>Back</button></a>
+    <a href="/home/"><button class="back">Back</button></a>
     <form class="trackResult" action="/generateRecommendations/" method="POST">
+    <h2>Pick a song to base recommendations<h2>
     <h3>Top Tracks</h3>
+    <div class="top">
     {% for item in topTracks %}
-        <button type="submit" name="trackValue" value="{{item['id']}}"><img src="{{item['image']}}"><p>{{item['name']}} by {{item['artist']}}</p></button>
+        <button class="APIButton" type="submit" name="trackValue" value="{{item['id']}}"><img src="{{item['image']}}"><p>{{item['name']}} by {{item['artist']}}</p></button>
     {% endfor %}
+    </div>
     <h3>Recent Tracks</h3>
+    <div class="recent">
     {% for item in recentTracks %}
-        <button type="submit" name="trackValue" value="{{item['id']}}"><img src="{{item['image']}}"><p>{{item['name']}} by {{item['artist']}}</p></button>
+        <button class="APIButton" type="submit" name="trackValue" value="{{item['id']}}"><img src="{{item['image']}}"><p>{{item['name']}} by {{item['artist']}}</p></button>
     {% endfor %}
+    </div>
     <h3>In Your Library</h3>
+    <div class="library">
     {% for item in library %}
-        <button type="submit" name="trackValue" value="{{item['id']}}"><img src="{{item['image']}}"><p>{{item['name']}} by {{item['artist']}}</p></button>
+        <button class="APIButton" type="submit" name="trackValue" value="{{item['id']}}"><img src="{{item['image']}}"><p>{{item['name']}} by {{item['artist']}}</p></button>
     {% endfor %}
+    </div>
     </form>
 </body>

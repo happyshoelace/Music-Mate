@@ -1,0 +1,32 @@
+<head>
+    <title>Music Mate</title>
+    <link rel="stylesheet" href="../static/css/main.css">
+</head>
+<body>
+    <a href="/generateRecommendations/"><button class="back">Back</button></a>
+    <form action="/addToPlaylist/" method="POST">
+    
+        <h2>Which playlist do you want to add these songs to?</h2>
+        <h3>Your playlists</h3>
+    <div class="playlists">
+        {% for item in playlists %}
+        <button type="submit" name="playlistValue" value="{{item['id']}}"><img src="{{item['image']}}"><p>{{item['name']}}</p></button>
+        {% endfor %}
+    </div>
+        </form>
+    <form action="/createPlaylist/" method="POST">
+    <h3>Or make a new playlist</h3>
+    <div class="newPlaylist">
+    <input type="text" name='playlistName' placeholder="Playlist Name" required>
+    <br>
+    <input type="text" name='playlistDescription' placeholder="Description">
+    <br>
+    <div class="radioText">
+    <input type="radio" name="playlistStatus" value="True">Public
+    <input type="radio" name="playlistStatus" value="False" checked>Private
+    <br>
+    </div>
+    <button class="pink next" type="submit" value="submit">Create</button>
+    </div>
+    </form>
+</body>

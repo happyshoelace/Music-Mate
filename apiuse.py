@@ -3,7 +3,6 @@ import spotipy
 import spotipy.util as util
 from spotipy.oauth2 import SpotifyOAuth
 from client import *
-import pprint
 from clientsetup import userID, sp
 from urllib.error import HTTPError
 
