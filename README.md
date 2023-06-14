@@ -32,7 +32,7 @@ I use the following tables and columns:
 |_playlistID Pk
  
  
-**playlist_tracks **
+**playlist_tracks**
 
 |_ trackID Fk
 
