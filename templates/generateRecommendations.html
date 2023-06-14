@@ -23,8 +23,8 @@
     <a href="/playlistByRecommendation/"><button class="back">Back</button></a>
     <form action="/getPlaylists/" method="POST">
     <h2>Awesome! Here's some similar tracks!</h2>
-        <input type="button" class="pink"onclick='selects()' value="selectAll"/>
-        <input type="button" class="purple" onclick='deSelect()' value="deselectAll"/>
+        <input type="button" class="pink"onclick='selects()' value="Select All"/>
+        <input type="button" class="purple" onclick='deSelect()' value="Deselect All"/>
         <br> 
         <div class="recommendations">
     {% for item in recommendations %}

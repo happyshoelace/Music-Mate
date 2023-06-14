@@ -35,7 +35,6 @@ def searchTracks():
     if request.method == 'POST':
         searchQuery = request.form.get('searchQuery')
         searchResults = apiuse.generalSearch(searchQuery, 15)
-        print(searchResults)
         return render_template('playlistBySearchResults.html', searchResults=searchResults)
     else:
         return render_template('err.html')
@@ -43,43 +42,41 @@ def searchTracks():
 @app.route('/findPlaylists/', methods=["GET","POST"])
 def findPlaylists():
     trackID = request.form.get('trackValue')
-    try:
-        trackDetails = sp.track(trackID)
-    except NameError:
-        sp=clientsetup.initalise()
-        trackDetails = sp.track(trackID)
-    finally:
-        trackDetails = sp.track(trackID)
-        trackName = trackDetails["name"]
-        trackArtist = trackDetails['artists'][0]['name']
-        trackAlbum = trackDetails["album"]['name']
-        trackURL = trackDetails["external_urls"]["spotify"]
-        trackImage = trackDetails['album']['images'][0]['url']
-        trackDBSearch = databasing.readTracksFromDB(trackID)
-        playlistID = databasing.readPlaylistsFromDB(trackID)
-        playlistList = []
-        registeredListeners = 0
-        userPlays = 0
-        userInfo = sp.me()
-        userName = userInfo['id']
-        recordedTrack = False
-        timeResponse = ""
-        for user in trackDBSearch['registered listeners']:
-            registeredListeners += 1
-            if user == userName:
-                userPlays = trackDBSearch['registered listeners'][user]
-                recordedTrack = True
-        if recordedTrack:
-            firstRecord = trackDBSearch['first recorded']
+    trackDetails = sp.track(trackID)
+    trackName = trackDetails["name"]
+    trackArtist = trackDetails['artists'][0]['name']
+    trackAlbum = trackDetails["album"]['name']
+    trackURL = trackDetails["external_urls"]["spotify"]
+    trackImage = trackDetails['album']['images'][0]['url']
+    trackDBSearch = databasing.readTracksFromDB(trackID)
+    playlistID = databasing.readPlaylistsFromDB(trackID)
+    playlistList = []
+    registeredListeners = 0
+    userPlays = 0
+    userInfo = sp.me()
+    userName = userInfo['id']
+    recordedTrack = False
+    timeResponse = ""
+    for user in trackDBSearch['registered listeners']:
+        registeredListeners += 1
+        if user == userName:
+            userPlays = trackDBSearch['registered listeners'][user]
+            recordedTrack = True
+    if recordedTrack:
+        firstRecord = trackDBSearch['first recorded']
+        try:
             lastRecord = trackDBSearch['most recent record']
             timeResponse = f"The first time you logged it was on {firstRecord}, and the most recent time was {lastRecord}!"
-        for playlist in playlistID:
-            try:
-                playlistInfo = apiuse.getPlaylistName(playlist[0])
-                playlistList.append(playlistInfo)
-            except (spotipy.SpotifyException, HTTPError) as err:
-                print(err)
-        return render_template('playlistBySearchFinalDisplay.html', userPlays=userPlays, timeResponse=timeResponse, trackID=trackID, trackName=trackName, trackAlbum=trackAlbum, trackArtist=trackArtist,trackImage=trackImage, trackURL= trackURL, trackDBSearch=trackDBSearch, playlistList=playlistList)
+        except KeyError:
+            timeResponse = f"You logged it in {firstRecord}!"
+        
+    for playlist in playlistID:
+        try:
+            playlistInfo = apiuse.getPlaylistName(playlist[0])
+            playlistList.append(playlistInfo)
+        except (spotipy.SpotifyException, HTTPError) as err:
+            print(err)
+    return render_template('playlistBySearchFinalDisplay.html', userPlays=userPlays, timeResponse=timeResponse, trackID=trackID, trackName=trackName, trackAlbum=trackAlbum, trackArtist=trackArtist,trackImage=trackImage, trackURL= trackURL, trackDBSearch=trackDBSearch, playlistList=playlistList)
 
 @app.route('/playlistByRecommendation/')
 def playlistByRecommendation():
@@ -95,12 +92,7 @@ def generateRecommendations():
         recommendations = apiuse.getRecommendations(trackID,25)
         return render_template('generateRecommendations.html', recommendations=recommendations)
     else:
-        try:
-            trackID = [request.form.get('trackValue')]
-            recommendations = apiuse.getRecommendations(recommendationIDs,5)
-            return render_template('generateRecommendations.html', recommendations=recommendations)
-        except NameError:
-            return render_template('err.html')
+        return render_template('err.html')
     
 @app.route('/getPlaylists/', methods=['GET','POST'])
 def getPlaylists():
@@ -139,9 +131,11 @@ def addToPlaylists():
 
     if request.method == 'POST':
         playlistID = request.form.get('playlistValue')
-
         recommendationIDs.append(trackID[0])
         response = apiuse.addTrack(playlistID,recommendationIDs)
+        del trackID
+        del playlistID
+        del recommendationIDs
         if response:
             return render_template('playlistAddSuccess.html')
         else:
@@ -151,15 +145,15 @@ def addToPlaylists():
         try:
             recommendationIDs.append(trackID[0])
             response = apiuse.addTrack(playlistID,recommendationIDs)
-            del recommendationIDs
             del trackID
             del playlistID
+            del recommendationIDs
             if response:
-                return render_template('playlistAddSuccess')
+                return render_template('playlistAddSuccess.html')
             else:
                 flash("Hmm, something went wrong.")
                 return redirect('/home/')
-        except NameError:
+        except BaseException:
             return render_template('err.html')
             
 @app.errorhandler(404)
@@ -167,4 +161,4 @@ def error404(e):
     return render_template('err.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

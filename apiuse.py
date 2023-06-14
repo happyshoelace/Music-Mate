@@ -78,7 +78,10 @@ def getPlaylists(getLimit=10):
         currentPlaylist = {}
         currentPlaylist['name'] = playlist['name']
         currentPlaylist['id'] = playlist['id']
-        currentPlaylist['image'] = playlist['images'][0]['url']
+        try:
+            currentPlaylist['image'] = playlist['images'][0]['url']
+        except IndexError:
+            pass
         playlists.append(currentPlaylist)
         getPlaylistItems(playlist['id'])
     return playlists
@@ -136,8 +139,7 @@ def generalSearch(query, limit=5):
 def getPlaylistName(playlistID):
     try:
         results = sp.playlist(playlistID)
-        return {
-                "playlistName":results['name'], 
+        return {"playlistName":results['name'], 
                 "url":results["external_urls"]["spotify"],
                 "image":results["images"][0]["url"]
                 }
