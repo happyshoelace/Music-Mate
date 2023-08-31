@@ -44,4 +44,4 @@ Furthermore, this program has the following dependencies:
 2. psycopg2
 3. Flask
 
-Ensure you install these into your virtual environment before running this program.
+Ensure you install these into your virtual environment using the requirements.txt file before running the program.

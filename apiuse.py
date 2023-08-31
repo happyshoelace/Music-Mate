@@ -6,10 +6,10 @@ from client import *
 from clientsetup import userID, sp
 from urllib.error import HTTPError
 
-
 def getRecents(checklimit=10):
     results = sp.current_user_recently_played(limit=checklimit)
     recentTracks = []
+    trackIDList = []
     for item in results['items']:
         currentTrack = {}
         track = item['track']
@@ -20,12 +20,15 @@ def getRecents(checklimit=10):
         trackDetails = sp.track(trackID)
         currentTrack["image"] = trackDetails['album']['images'][0]['url']
         recentTracks.append(currentTrack)
-        databasing.saveTracktoDB(trackID)
+        trackIDList.append(trackID)
+    databasing.saveTracktoDB(trackIDList)
     return recentTracks
+
 
 def getTop(checklimit=10, timeframe="medium_term"):
     results = sp.current_user_top_tracks(limit=checklimit, time_range=timeframe)
     topTracks = []
+    trackIDList = []
     for track in results['items']:
         currentTrack = {}
         trackID = track['id']
@@ -35,13 +38,14 @@ def getTop(checklimit=10, timeframe="medium_term"):
         trackDetails = sp.track(trackID)
         currentTrack["image"] = trackDetails['album']['images'][0]['url']
         topTracks.append(currentTrack)
-        databasing.saveTracktoDB(trackID)
+        trackIDList.append(trackID)
+    databasing.saveTracktoDB(trackIDList)
     return topTracks
-
 
 def getLibrary(limit = 10):
     results = sp.current_user_saved_tracks(limit)
     libraryTracks = []
+    trackIDList = []
     for item in results['items']:
         currentTrack = {}
         track = item['track']
@@ -52,9 +56,9 @@ def getLibrary(limit = 10):
         trackDetails = sp.track(trackID)
         currentTrack["image"] = trackDetails['album']['images'][0]['url']
         libraryTracks.append(currentTrack)
-        databasing.saveTracktoDB(trackID)
+        trackIDList.append(trackID)
+    databasing.saveTracktoDB(trackIDList)
     return libraryTracks
-
 
 def getRecommendations(baseTrack, recommnendNum):
     recommendedTracks = sp.recommendations(seed_tracks=baseTrack, limit=recommnendNum)

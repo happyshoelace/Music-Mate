@@ -5,7 +5,7 @@ from client import *
 from clientsetup import userID
 
 
-def saveTracktoDB(trackID):
+def saveTracktoDB(trackIDs):
     try:
         # Connect to an existing database
         connection = psycopg2.connect(user="postgres",
@@ -17,18 +17,19 @@ def saveTracktoDB(trackID):
         
         inDB = False
 
-        cursor.execute("SELECT * FROM public.tracks;")
-        tracks = cursor.fetchall()
-        for results in tracks:
-            if results[0] == trackID:
-                inDB = True
-                break
-        if inDB == False:
-            cursor.execute(f"INSERT INTO public.tracks (track_id) VALUES ('{trackID}')")
-            connection.commit()
+        cursor.execute("SELECT track_id FROM public.tracks;")
+        results = cursor.fetchall()
+        dbTracks = []
+        for dbTrack in results:
+            dbTracks.append(dbTrack[0])
 
-        cursor.execute(f"INSERT INTO public.user_tracks (track_id, user_id) VALUES ('{trackID}', '{userID}')")
-        connection.commit()
+        for trackID in trackIDs:
+            if trackID not in dbTracks:
+                cursor.execute(f"INSERT INTO public.tracks (track_id) VALUES ('{trackID}')")
+                connection.commit()
+
+            cursor.execute(f"INSERT INTO public.user_tracks (track_id, user_id) VALUES ('{trackID}', '{userID}')")
+            connection.commit()
 
     except (Exception, Error) as error:
         print("Error while connecting to PostgreSQL", error)
